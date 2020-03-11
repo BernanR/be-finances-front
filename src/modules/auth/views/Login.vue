@@ -6,10 +6,21 @@
         <v-card class="elevation-1">
 
           <v-toolbar color="primary" dark >
-              <v-toolbar-title>Login</v-toolbar-title>
+              <v-toolbar-title>{{ texts.toobar }}</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form>
+               <v-text-field
+               v-if="!isLogin"
+                prepend-icon="person"
+                name="name"
+                label="Nome"
+                type="text"
+                :error-messages="nameErros"
+                :success="$v.user.name.$invalid"
+                v-model.trim="$v.user.name.$model"
+              ></v-text-field>
+
               <v-text-field
                 prepend-icon="email"
                 name="email"
@@ -32,9 +43,9 @@
             <v-btn
               block
               depressed
-              @click="log"
+              @click="isLogin = !isLogin"
             >
-              Criar Conta
+              {{ texts.button }}
             </v-btn>
 
           </v-card-text>
@@ -46,7 +57,7 @@
               color="primary"
               large
               @click="submit"
-            >Login</v-btn>
+            >{{ texts.toobar }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -62,24 +73,53 @@ import { required, email, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'Login',
   data: () => ({
+    isLogin: true,
     user: {
+      name: '',
       email: '',
       password: ''
     }
   }),
-  validations: {
-    user: {
-      email: {
-        required,
-        email
-      },
-      password: {
-        required,
-        minLength: minLength(6)
+  validations () {
+    const validations = {
+      user: {
+        email: {
+          required,
+          email
+        },
+        password: {
+          required,
+          minLength: minLength(5)
+        }
+      }
+    }
+
+    if (this.isLogin) { return validations }
+
+    return {
+      user: {
+        ...validations.user,
+        name: {
+          required,
+          minLength: minLength(10)
+        }
       }
     }
   },
   computed: {
+    texts () {
+      return this.isLogin
+        ? { toobar: 'Entrar', button: 'Criar Conta' }
+        : { toobar: 'Criar conta', button: 'Já tenho uma Conta' }
+    },
+    nameErros () {
+      const errors = []
+      const name = this.$v.user.name
+      if (!name.$dirty) { return errors }
+      !name.required && errors.push('Nome é obrigatória!')
+      !name.minLength && errors.push(`Insira pelo menos ${name.$params.minLength.min} caracteres!`)
+      return errors
+    },
     emailErrors () {
       const errors = []
       const email = this.$v.user.email
