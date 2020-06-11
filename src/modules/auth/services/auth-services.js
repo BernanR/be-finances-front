@@ -7,6 +7,7 @@ const login = async variables => {
     mutation: LoginMutation,
     variables
   })
+  console.log('variables', variables)
   const { login } = response.data.login
   await onLogin(apollo, login.token)
   return login
@@ -19,6 +20,7 @@ const signup = async variables => {
   })
   const { signup } = response.data.signup
   await onLogin(apollo, signup.token)
+
   return signup
 }
 

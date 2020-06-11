@@ -1,17 +1,28 @@
 <template>
-  <v-container fill-height >
-    <v-layout justify-center align-center>
+  <v-container fill-height>
+    <v-layout
+      justify-center
+      align-center
+    >
 
-      <v-flex xs12 sm6 md4 xl3>
+      <v-flex
+        xs12
+        sm6
+        md4
+        xl3
+      >
         <v-card class="elevation-1">
 
-          <v-toolbar color="primary" dark >
-              <v-toolbar-title>{{ texts.toobar }}</v-toolbar-title>
+          <v-toolbar
+            color="primary"
+            dark
+          >
+            <v-toolbar-title>{{ texts.toobar }}</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form>
-               <v-text-field
-               v-if="!isLogin"
+              <v-text-field
+                v-if="!isLogin"
                 prepend-icon="person"
                 name="name"
                 label="Nome"
@@ -136,12 +147,12 @@ export default {
       if (!password.$dirty) { return errors }
       !password.required && errors.push('Senha é obrigatória!')
       !password.minLength && errors.push(`Insira pelo menos ${password.$params.minLength.min} caracteres!`)
-
       return errors
     }
   },
   methods: {
     async submit () {
+      console.log("aqui");
       const authData = this.isLogin
         ? await AuthService.login(this.user)
         : await AuthService.signup(this.user)
