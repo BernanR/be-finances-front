@@ -12,12 +12,19 @@
         xl3
       >
         <v-card class="elevation-1">
-
           <v-toolbar
             color="primary"
             dark
           >
             <v-toolbar-title>{{ texts.toobar }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-progress-circular
+              v-show="isLoading"
+              indeterminate=""
+              color="white"
+              width="2"
+            >
+            </v-progress-circular>
           </v-toolbar>
           <v-card-text>
             <v-form>
@@ -31,7 +38,6 @@
                 :success="$v.user.name.$invalid"
                 v-model.trim="$v.user.name.$model"
               ></v-text-field>
-
               <v-text-field
                 prepend-icon="email"
                 name="email"
@@ -58,9 +64,7 @@
             >
               {{ texts.button }}
             </v-btn>
-
           </v-card-text>
-
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -70,9 +74,22 @@
               @click="submit"
             >{{ texts.toobar }}</v-btn>
           </v-card-actions>
+          <v-snackbar
+            v-model="showSnackbar"
+            top
+          >
+            {{ error }}
+            <v-btn
+              color="pink"
+              flat
+              icon
+              @click="showSnackbar = false"
+            >
+              <v-icon> close </v-icon>
+            </v-btn>
+          </v-snackbar>
         </v-card>
       </v-flex>
-
     </v-layout>
   </v-container>
 </template>
@@ -81,11 +98,15 @@
 
 import { required, email, minLength } from 'vuelidate/lib/validators'
 import AuthService from './../services/auth-services'
+import { formatError } from '@/utils'
 
 export default {
   name: 'Login',
   data: () => ({
+    error: undefined,
     isLogin: true,
+    isLoading: false,
+    showSnackbar: false,
     user: {
       name: '',
       email: '',
@@ -152,11 +173,19 @@ export default {
   },
   methods: {
     async submit () {
-      console.log("aqui");
-      const authData = this.isLogin
-        ? await AuthService.login(this.user)
-        : await AuthService.signup(this.user)
-      console.log('authData: ', authData)
+      this.isLoading = true
+      try {
+        this.isLogin
+          ? await AuthService.login(this.user)
+          : await AuthService.signup(this.user)
+        this.$router.push(this.$route.query.redirect || '/dashboard')
+      } catch (error) {
+        this.error = formatError(error.message)
+        this.showSnackbar = true
+        console.log('Error:', error)
+      } finally {
+        this.isLoading = false
+      }
     }
   }
 }
