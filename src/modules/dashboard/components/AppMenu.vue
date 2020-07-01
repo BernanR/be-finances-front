@@ -90,8 +90,7 @@ export default {
   },
   data: () => ({
     items: [
-      { title: 'Home', icon: 'dashboard', url: '/dashboard', exact: true },
-      { title: 'Outher', icon: 'dashboard', url: '/outher', exact: true }
+      { title: 'Home', icon: 'dashboard', url: '/dashboard', exact: true }
     ],
     miniVariant: false
   }),
