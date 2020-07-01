@@ -5,6 +5,12 @@
 npm install
 ```
 
+## Version Node
+```
+13.0.0
+```
+
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
