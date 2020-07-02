@@ -13,8 +13,8 @@ npm install
 ### Compiles and hot-reloads for development
 ```
 npm run serve
-if you using linux try sudo npm run serve
 ```
+*Note: If you're using linux, try sudo npm run serve
 
 ### Compiles and minifies for production
 ```
