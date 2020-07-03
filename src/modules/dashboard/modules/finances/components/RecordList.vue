@@ -1,17 +1,27 @@
 <template>
-  <v-list two-line>
-    <v-subheader>05/10/2020</v-subheader>
-    <records-list-item
-      v-for="record in records"
-      :key="record.id"
-      :record="record"
-    />
-    <v-divider></v-divider>
+  <v-list
+    two-line
+    subheader
+  >
+    <template v-for="(recordsList, date, index) in mappedRecords">
+      <v-subheader :key="date">{{ date }}</v-subheader>
+      <records-list-item
+        v-for="record in recordsList"
+        :key="record.id"
+        :record="record"
+      />
+      <v-divider
+        :key="`${date}-${index}`"
+        v-if="showDivider(index,mappedRecords)"
+      ></v-divider>
+    </template>
   </v-list>
 </template>
 
 <script>
 
+import moment from 'moment'
+import { groupBy } from '@/utils'
 import RecordsListItem from './RecordsListItem.vue'
 import RecordsService from './../services/records-service'
 
@@ -23,9 +33,22 @@ export default {
   data: () => ({
     records: []
   }),
+  computed: {
+    mappedRecords () {
+      return groupBy(this.records, 'date', (record, dataKey) => {
+        return moment(record[dataKey]).format('DD/MM/YYYY')
+      })
+    }
+  },
   async created () {
     this.records = await RecordsService.records()
-    console.log('records:', this.records)
+    console.log('Records: ', this.records)
+    console.log('Mapped Records: ', this.mappedRecords)
+  },
+  methods: {
+    showDivider (index, object) {
+      return index < Object.keys(object).length - 1
+    }
   }
 }
 </script>

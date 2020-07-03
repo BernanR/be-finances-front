@@ -35,6 +35,7 @@ const groupBy = (array, key, makeCurrentKey) => {
 }
 
 export {
+  groupBy,
   currencyFormatter,
   errorHandler,
   formatError
