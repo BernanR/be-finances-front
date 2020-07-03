@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Lancamentos</h1>
-
-    <records-list />
-  </div>
+  <RecordsList />
 </template>
 
 <script>
