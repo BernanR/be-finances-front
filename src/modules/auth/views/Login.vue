@@ -4,7 +4,6 @@
       justify-center
       align-center
     >
-
       <v-flex
         xs12
         sm6

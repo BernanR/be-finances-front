@@ -1,7 +1,7 @@
 <template>
   <div>
-    <app-toolbar v-model="drawer" />
-    <app-menu v-model="drawer" />
+    <AppToolbar v-model="drawer" />
+    <AppMenu v-model="drawer" />
 
     <v-container grid-list-md>
       <v-layout>

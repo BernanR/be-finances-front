@@ -29,7 +29,7 @@
           text-center
         >
           <h3 class="font-weight-light">
-            <scpan>Saldo do mês:</scpan>
+            <span>Saldo do mês:</span>
             <strong
               class="ml-5"
               :class="amountColor(totalAmount)"
@@ -74,18 +74,19 @@ export default {
       return this.records.reduce((sum, record) => sum + record.amount, 0)
     }
   },
-  async created () {
-    this.records = await RecordsService.records()
-    console.log('Records: ', this.records)
-    console.log('Mapped Records: ', this.mappedRecords)
-  },
   methods: {
     showDivider (index, object) {
       return index < Object.keys(object).length - 1
     },
     changeMonth (month) {
-      console.log('month: ', month)
+      this.setRecords(month)
+      console.log('month', month)
+    },
+    async setRecords (month) {
+      console.log('month', month)
+      this.records = await RecordsService.records({ month })
     }
+
   }
 }
 </script>

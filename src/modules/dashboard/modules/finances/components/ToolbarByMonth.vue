@@ -8,7 +8,6 @@
         <div class="text-xs-left">
           <v-btn
             icon
-            flat
             @click="decrement"
           >
             <v-icon>chevron_left</v-icon>
@@ -22,7 +21,6 @@
         <div class="text-xs-right">
           <v-btn
             icon
-            flat
             @click="increment"
           >
             <v-icon>chevron_right</v-icon>
@@ -40,14 +38,13 @@ import moment from 'moment'
 export default {
   name: 'ToolbarByMonth',
   props: {
-    formart: String
+    format: String
   },
   data: () => ({
     date: moment()
   }),
   computed: {
     currentMonht () {
-      console.log('moment: ', this.date)
       return this.date.format('MMMM YYYY')
     }
   },
@@ -60,6 +57,7 @@ export default {
     },
     decrement () {
       this.date = this.date.clone().subtract(1, 'month')
+      this.emit()
     },
     increment () {
       this.date = this.date.clone().add(1, 'month')

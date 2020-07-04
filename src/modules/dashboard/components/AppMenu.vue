@@ -15,10 +15,8 @@
 
   <v-navigation-drawer
     :value="value"
-    :color="color"
     @input="$emit('input', $event)"
     :mini-variant="miniVariant"
-    :right="right"
     temporary
     absolute
     dark
@@ -33,10 +31,7 @@
         </v-list-item-action>
       </v-list-item>
 
-      <v-list-item
-        avatar
-        tag="div"
-      >
+      <v-list-item tag="div">
         <v-list-item-avatar>
           <img src="https://randomuser.me/api/portraits/men/81.jpg">
         </v-list-item-avatar>
@@ -89,6 +84,7 @@ export default {
     value: Boolean
   },
   data: () => ({
+    user: {},
     items: [
       { title: 'Home', icon: 'dashboard', url: '/dashboard', exact: true }
     ],

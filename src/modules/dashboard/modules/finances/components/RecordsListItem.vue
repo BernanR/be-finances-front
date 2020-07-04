@@ -1,8 +1,5 @@
 <template>
-  <v-list-item
-    avatar
-    tag="div"
-  >
+  <v-list-item tag="div">
     <v-list-item-avatar>
       <v-icon :class="[ recordIconColor(record.type), 'lighten-1 while--text' ]"></v-icon>
     </v-list-item-avatar>
