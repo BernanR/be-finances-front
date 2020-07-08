@@ -1,14 +1,28 @@
 <template>
   <div>
+    <TotalBalance class="mb-2" />
     <ToolbarByMonth
       class="mb-2"
       format="MM-YYYY"
       @monthChange="changeMonth"
+      :color="toolbarColor"
+      :month="$route.query.month"
     />
     <v-card>
+      <v-card-text
+        v-if="mappedRecordsLenght === 0"
+        class="text-lg-center"
+      >
+        <v-icon
+          size="100"
+          color="grey"
+        >assignment</v-icon>
+        <p class="font-weight-light grey--text subheading">Nehum lançamento para o período</p>
+      </v-card-text>
       <v-list
         two-line
         subheader
+        v-else
       >
         <template v-for="(recordsList, date, index) in mappedRecords">
           <v-subheader :key="date">{{ date }}</v-subheader>
@@ -42,7 +56,6 @@
 </template>
 
 <script>
-
 import moment from 'moment'
 import { groupBy } from '@/utils'
 import amountColorMixin from './../mixins/amount-color'
@@ -50,17 +63,16 @@ import formatCurrencyMixin from '@/mixins/format-currency'
 import RecordsService from './../services/records-service'
 import RecordsListItem from './RecordsListItem.vue'
 import ToolbarByMonth from './ToolbarByMonth.vue'
+import TotalBalance from './TotalBalance.vue'
 
 export default {
   name: 'RecordList',
   components: {
     RecordsListItem,
-    ToolbarByMonth
+    ToolbarByMonth,
+    TotalBalance
   },
-  mixins: [
-    amountColorMixin,
-    formatCurrencyMixin
-  ],
+  mixins: [amountColorMixin, formatCurrencyMixin],
   data: () => ({
     records: []
   }),
@@ -70,8 +82,14 @@ export default {
         return moment(record[dataKey]).format('DD/MM/YYYY')
       })
     },
+    mappedRecordsLenght () {
+      return Object.keys(this.mappedRecords).length
+    },
     totalAmount () {
       return this.records.reduce((sum, record) => sum + record.amount, 0)
+    },
+    toolbarColor () {
+      return this.totalAmount < 0 ? 'error' : 'primary'
     }
   },
   methods: {
@@ -79,14 +97,17 @@ export default {
       return index < Object.keys(object).length - 1
     },
     changeMonth (month) {
+      console.log('chegou aqui agora', this.$router.path)
+      this.$router.push({
+        path: this.$router.path,
+        query: { month }
+      })
       this.setRecords(month)
-      console.log('month', month)
     },
     async setRecords (month) {
-      console.log('month', month)
+      console.log('Get Records by month: ', month)
       this.records = await RecordsService.records({ month })
     }
-
   }
 }
 </script>

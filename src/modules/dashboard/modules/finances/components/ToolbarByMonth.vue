@@ -1,6 +1,6 @@
 <template>
   <v-toolbar
-    color="primary"
+    :color="color"
     elevation-9
   >
     <v-layout align-center>
@@ -15,7 +15,7 @@
         </div>
       </v-flex>
       <v-flex xs10>
-        <v-toolbar-title class="text-center"><span> {{ currentMonht }} </span></v-toolbar-title>
+        <v-toolbar-title class="text-center"><span> {{ currentMonth }} </span></v-toolbar-title>
       </v-flex>
       <v-flex xs1>
         <div class="text-xs-right">
@@ -38,17 +38,20 @@ import moment from 'moment'
 export default {
   name: 'ToolbarByMonth',
   props: {
-    format: String
+    color: String,
+    format: String,
+    month: String
   },
   data: () => ({
-    date: moment()
+    date: undefined
   }),
   computed: {
-    currentMonht () {
+    currentMonth () {
       return this.date.format('MMMM YYYY')
     }
   },
   created () {
+    this.setCurrentMonth()
     this.emit()
   },
   methods: {
@@ -62,6 +65,9 @@ export default {
     increment () {
       this.date = this.date.clone().add(1, 'month')
       this.emit()
+    },
+    setCurrentMonth () {
+      this.date = this.month ? moment(this.month, this.format) : moment()
     }
   }
 }
