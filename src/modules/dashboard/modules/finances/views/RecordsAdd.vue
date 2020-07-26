@@ -10,7 +10,7 @@
         md4
         lg4
       >
-        <p>Amout</p>
+        <NumericDisplay :color="color" />
       </v-flex>
       <v-flex
         lg12
@@ -167,8 +167,13 @@ import { mapActions } from 'vuex'
 import AccountsService from '../services/accounts-service'
 import CategoriesService from '../services/categories-services'
 
+import NumericDisplay from '../components/NumericDisplay'
+
 export default {
   name: 'RecordsAdd',
+  components: {
+    NumericDisplay
+  },
   data () {
     return {
       accounts: [],
